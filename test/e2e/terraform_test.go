@@ -24,8 +24,7 @@ func TestExamples(t *testing.T) {
 
 func testExample(t *testing.T, exampleRelativePath string) {
 	test_helper.RunE2ETest(t, "../../", exampleRelativePath, terraform.Options{
-		Upgrade:     true,
-		Parallelism: 1, // It looks like unknown parallel related bug in service side.
+		Upgrade: true,
 	}, func(t *testing.T, output test_helper.TerraformOutput) {
 		vnetId, ok := output["test_vnet_id"].(string)
 		assert.True(t, ok)

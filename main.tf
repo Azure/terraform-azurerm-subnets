@@ -49,6 +49,9 @@ resource "azurerm_subnet" "subnet" {
       }
     }
   }
+
+  # Do not remove this `depends_on` or we'll met a parallel related issue that failed the creation of `azurerm_subnet_route_table_association` and `azurerm_subnet_network_security_group_association`
+  depends_on = [azurerm_virtual_network_dns_servers.vnet_dns]
 }
 
 locals {
