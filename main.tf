@@ -61,29 +61,11 @@ locals {
   }
 }
 
-locals {
-  subnet_names_with_network_security_group = keys(local.subnet_with_network_security_group)
-  subnet_with_network_security_group = {
-    for name, subnet in var.subnets :
-    name => subnet.network_security_group.id
-    if subnet.network_security_group != null
-  }
-}
-
 resource "azurerm_subnet_network_security_group_association" "vnet" {
   for_each = toset(local.subnet_names_with_network_security_group)
 
-  network_security_group_id = local.subnet_with_network_security_group[each.value]
+  network_security_group_id = var.subnets[each.value].network_security_group.id
   subnet_id                 = local.azurerm_subnets[each.value]
-}
-
-locals {
-  subnet_names_with_route_table = keys(local.subnets_with_route_table)
-  subnets_with_route_table = {
-    for name, subnet in var.subnets :
-    name => subnet.route_table.id
-    if subnet.route_table != null
-  }
 }
 
 resource "azurerm_subnet_route_table_association" "vnet" {
@@ -91,6 +73,4 @@ resource "azurerm_subnet_route_table_association" "vnet" {
 
   route_table_id = var.subnets[each.value].route_table.id
   subnet_id      = local.azurerm_subnets[each.value]
-
-  depends_on = [azurerm_subnet_network_security_group_association.vnet]
 }
