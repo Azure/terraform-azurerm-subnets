@@ -28,6 +28,11 @@ type subnet struct {
 	} `mapstructure:"delegations,omitempty"`
 }
 
+func (s subnet) toMap() (m map[string]interface{}) {
+	_ = mapstructure.Decode(&s, &m)
+	return
+}
+
 type nsg struct {
 	Id string `mapstructure:"id"`
 }
@@ -36,39 +41,32 @@ type routeTable struct {
 	Id string `mapstructure:"id"`
 }
 
-var baseSubnet = subnet{
-	name:             "baseSubnet",
-	id:               "baseSubnet_id",
-	Address_prefixes: []string{"10.0.0.0/24"},
-}
-
 var (
-	baseSubnetMap = toMap(baseSubnet)
-	subnetWithRt  = subnet{
+	baseSubnet = subnet{
+		name:             "baseSubnet",
+		id:               "baseSubnet_id",
+		Address_prefixes: []string{"10.0.0.0/24"},
+	}
+	subnetWithRt = subnet{
 		name:             "subnetWithRt",
 		id:               "subnetWithRt_id",
 		Address_prefixes: []string{"10.0.1.0/24"},
 		Route_table:      &routeTable{Id: "rt_id"},
 	}
-)
-
-var (
-	subnetWithRtMap = toMap(subnetWithRt)
-	subnetWithNsg   = subnet{
+	subnetWithNsg = subnet{
 		name:                   "subnetWithNsg",
 		id:                     "subnetWithNsg_id",
 		Address_prefixes:       []string{"10.0.2.0/24"},
 		Network_security_group: &nsg{Id: "nsg_id"},
 	}
 )
-var subnetWithNsgMap = toMap(subnetWithNsg)
 
 func TestSubnetWithRouteTableShouldCreateRouteTableAssociation(t *testing.T) {
 	vars := dummyVariables()
 	vars["subnets"] = map[string]interface{}{
-		baseSubnet.name:    baseSubnetMap,
-		subnetWithRt.name:  subnetWithRtMap,
-		subnetWithNsg.name: subnetWithNsgMap,
+		baseSubnet.name:    baseSubnet.toMap(),
+		subnetWithRt.name:  subnetWithRt.toMap(),
+		subnetWithNsg.name: subnetWithNsg.toMap(),
 	}
 	test_helper.RunE2ETest(t, "../../", "unit-test-fixture", terraform.Options{
 		Upgrade: false,
@@ -97,9 +95,9 @@ func TestSubnetWithRouteTableShouldCreateRouteTableAssociation(t *testing.T) {
 func TestSubnetWithNsgShouldCreateNsgAssociation(t *testing.T) {
 	vars := dummyVariables()
 	vars["subnets"] = map[string]interface{}{
-		baseSubnet.name:    baseSubnetMap,
-		subnetWithRt.name:  subnetWithRtMap,
-		subnetWithNsg.name: subnetWithNsgMap,
+		baseSubnet.name:    baseSubnet.toMap(),
+		subnetWithRt.name:  subnetWithRt.toMap(),
+		subnetWithNsg.name: subnetWithNsg.toMap(),
 	}
 	test_helper.RunE2ETest(t, "../../", "unit-test-fixture", terraform.Options{
 		Upgrade: false,
@@ -123,11 +121,6 @@ func TestSubnetWithNsgShouldCreateNsgAssociation(t *testing.T) {
 		_, ok = rt[subnetWithRt.name]
 		assert.False(t, ok)
 	})
-}
-
-func toMap(s subnet) (m map[string]interface{}) {
-	_ = mapstructure.Decode(&s, &m)
-	return
 }
 
 func dummyVariables() map[string]interface{} {
