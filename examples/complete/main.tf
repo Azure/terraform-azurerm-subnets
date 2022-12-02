@@ -25,6 +25,12 @@ resource "azurerm_network_ddos_protection_plan" "example" {
   resource_group_name = azurerm_resource_group.example.name
 }
 
+resource "azurerm_nat_gateway" "example" {
+  location            = azurerm_resource_group.example.location
+  name                = "example-natgateway"
+  resource_group_name = azurerm_resource_group.example.name
+}
+
 module "vnet" {
   source              = "../../"
   resource_group_name = azurerm_resource_group.example.name
@@ -56,6 +62,9 @@ module "vnet" {
     }
     subnet2 = {
       address_prefixes = ["10.0.2.0/24"]
+      nat_gateway = {
+        id = azurerm_nat_gateway.example.id
+      }
       network_security_group = {
         id = azurerm_network_security_group.nsg1.id
       }

@@ -13,6 +13,7 @@ type subnet struct {
 	name                                          string
 	id                                            string
 	Address_prefixes                              []string    `mapstructure:"address_prefixes"`
+	Nat_gateway                                   *natGw      `mapstructure:"nat_gateway, omitempty"`
 	Network_security_group                        *nsg        `mapstructure:"network_security_group,omitempty"`
 	Private_endpoint_network_policies_enabled     bool        `mapstructure:"private_endpoint_network_policies_enabled"`
 	Private_link_service_network_policies_enabled bool        `mapstructure:"private_link_service_network_policies_enabled"`
@@ -41,6 +42,10 @@ type routeTable struct {
 	Id string `mapstructure:"id"`
 }
 
+type natGw struct {
+	Id string `mapstructure:"id"`
+}
+
 var (
 	baseSubnet = subnet{
 		name:             "baseSubnet",
@@ -59,18 +64,18 @@ var (
 		Address_prefixes:       []string{"10.0.2.0/24"},
 		Network_security_group: &nsg{Id: "nsg_id"},
 	}
+	subnetWithNatGw = subnet{
+		name:             "subnetWithNatGw",
+		id:               "subnetWithNatGw_id",
+		Address_prefixes: []string{"10.0.3.0/24"},
+		Nat_gateway:      &natGw{Id: "nat_gw_id"},
+	}
 )
 
 func TestSubnetWithRouteTableShouldCreateRouteTableAssociation(t *testing.T) {
-	vars := dummyVariables()
-	vars["subnets"] = map[string]interface{}{
-		baseSubnet.name:    baseSubnet.toMap(),
-		subnetWithRt.name:  subnetWithRt.toMap(),
-		subnetWithNsg.name: subnetWithNsg.toMap(),
-	}
 	test_helper.RunE2ETest(t, "../../", "unit-test-fixture", terraform.Options{
 		Upgrade: false,
-		Vars:    vars,
+		Vars:    mockVariables(),
 	}, func(t *testing.T, output test_helper.TerraformOutput) {
 		rt := output["azurerm_subnet_route_table_association"].(map[string]interface{})
 		assert.Equal(t, 1, len(rt))
@@ -85,23 +90,13 @@ func TestSubnetWithRouteTableShouldCreateRouteTableAssociation(t *testing.T) {
 		subnetId, ok := outputs["subnet_id"]
 		assert.True(t, ok)
 		assert.Equal(t, subnetWithRt.id, subnetId)
-		_, ok = rt[baseSubnet.name]
-		assert.False(t, ok)
-		_, ok = rt[subnetWithNsg.name]
-		assert.False(t, ok)
 	})
 }
 
 func TestSubnetWithNsgShouldCreateNsgAssociation(t *testing.T) {
-	vars := dummyVariables()
-	vars["subnets"] = map[string]interface{}{
-		baseSubnet.name:    baseSubnet.toMap(),
-		subnetWithRt.name:  subnetWithRt.toMap(),
-		subnetWithNsg.name: subnetWithNsg.toMap(),
-	}
 	test_helper.RunE2ETest(t, "../../", "unit-test-fixture", terraform.Options{
 		Upgrade: false,
-		Vars:    vars,
+		Vars:    mockVariables(),
 	}, func(t *testing.T, output test_helper.TerraformOutput) {
 		rt := output["azurerm_subnet_network_security_group_association"].(map[string]interface{})
 		assert.Equal(t, 1, len(rt))
@@ -116,23 +111,52 @@ func TestSubnetWithNsgShouldCreateNsgAssociation(t *testing.T) {
 		subnetId, ok := outputs["subnet_id"]
 		assert.True(t, ok)
 		assert.Equal(t, subnetWithNsg.id, subnetId)
-		_, ok = rt[baseSubnet.name]
-		assert.False(t, ok)
-		_, ok = rt[subnetWithRt.name]
-		assert.False(t, ok)
+	})
+}
+
+func TestSubnetWithNatGwShouldCreateNatGwAssociation(t *testing.T) {
+	test_helper.RunE2ETest(t, "../../", "unit-test-fixture", terraform.Options{
+		Upgrade: false,
+		Vars:    mockVariables(),
+	}, func(t *testing.T, output test_helper.TerraformOutput) {
+		rt := output["azurerm_subnet_nat_gateway_association"].(map[string]interface{})
+		assert.Equal(t, 1, len(rt))
+		natGwSubnet, ok := rt[subnetWithNatGw.name]
+		assert.True(t, ok)
+		assert.NotNil(t, natGwSubnet)
+		association := natGwSubnet.(map[string]interface{})
+		outputs := association["outputs"].(map[string]interface{})
+		natGwId, ok := outputs["nat_gateway_id"]
+		assert.True(t, ok)
+		assert.Equal(t, subnetWithNatGw.Nat_gateway.Id, natGwId)
+		subnetId, ok := outputs["subnet_id"]
+		assert.True(t, ok)
+		assert.Equal(t, subnetWithNatGw.id, subnetId)
 	})
 }
 
 func dummyVariables() map[string]interface{} {
 	return map[string]interface{}{
-		"azurerm_subnets": map[string]string{
-			baseSubnet.name:    baseSubnet.id,
-			subnetWithRt.name:  subnetWithRt.id,
-			subnetWithNsg.name: subnetWithNsg.id,
-		},
 		"resource_group_name":           "dummyRg",
 		"virtual_network_address_space": []string{"10.0.0.0/16"},
 		"virtual_network_location":      "eastus",
 		"virtual_network_name":          "dummyVnet",
 	}
+}
+
+func mockVariables() map[string]interface{} {
+	vars := dummyVariables()
+	vars["azurerm_subnets"] = map[string]string{
+		baseSubnet.name:      baseSubnet.id,
+		subnetWithRt.name:    subnetWithRt.id,
+		subnetWithNsg.name:   subnetWithNsg.id,
+		subnetWithNatGw.name: subnetWithNatGw.id,
+	}
+	vars["subnets"] = map[string]interface{}{
+		baseSubnet.name:      baseSubnet.toMap(),
+		subnetWithRt.name:    subnetWithRt.toMap(),
+		subnetWithNsg.name:   subnetWithNsg.toMap(),
+		subnetWithNatGw.name: subnetWithNatGw.toMap(),
+	}
+	return vars
 }

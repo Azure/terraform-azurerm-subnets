@@ -8,6 +8,9 @@ variable "subnets" {
   type = map(object(
     {
       address_prefixes = list(string) # (Required) The address prefixes to use for the subnet.
+      nat_gateway = optional(object({
+        id = string # (Required) The ID of the NAT Gateway which should be associated with the Subnet. Changing this forces a new resource to be created.
+      }))
       network_security_group = optional(object({
         id = string # (Required) The ID of the Network Security Group which should be associated with the Subnet. Changing this forces a new association to be created.
       }))

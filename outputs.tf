@@ -20,5 +20,5 @@ output "vnet_name" {
 
 output "vnet_subnets_name_id" {
   description = "Can be queried subnet-id by subnet name by using lookup(module.vnet.vnet_subnets_name_id, subnet1)"
-  value       = local.azurerm_subnets
+  value       = local.azurerm_subnet_name2id
 }

@@ -55,7 +55,7 @@ resource "azurerm_subnet" "subnet" {
 }
 
 locals {
-  azurerm_subnets = {
+  azurerm_subnet_name2id = {
     for index, subnet in azurerm_subnet.subnet :
     subnet.name => subnet.id
   }
@@ -65,12 +65,19 @@ resource "azurerm_subnet_network_security_group_association" "vnet" {
   for_each = toset(local.subnet_names_with_network_security_group)
 
   network_security_group_id = var.subnets[each.value].network_security_group.id
-  subnet_id                 = local.azurerm_subnets[each.value]
+  subnet_id                 = local.azurerm_subnet_name2id[each.value]
 }
 
 resource "azurerm_subnet_route_table_association" "vnet" {
   for_each = toset(local.subnet_names_with_route_table)
 
   route_table_id = var.subnets[each.value].route_table.id
-  subnet_id      = local.azurerm_subnets[each.value]
+  subnet_id      = local.azurerm_subnet_name2id[each.value]
+}
+
+resource "azurerm_subnet_nat_gateway_association" "nat_gw" {
+  for_each = toset(local.subnet_names_with_nat_gateway)
+
+  nat_gateway_id = var.subnets[each.value].nat_gateway.id
+  subnet_id      = local.azurerm_subnet_name2id[each.value]
 }
