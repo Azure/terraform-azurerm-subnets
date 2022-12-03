@@ -6,9 +6,9 @@ This Terraform module deploys a Virtual Network in Azure with a subnet or a set 
 
 Basically this module is a modern version of [terraform-azurerm-vnet](https://registry.terraform.io/modules/Azure/vnet/azurerm/latest)([Github repo](https://www.github.com/Azure/terraform-azurerm-vnet)). 
 
-The `terraform-azurerm-vnet` module used `count` because it was the only option, nowadays we encourage using `for_each` instead, but there is no way for us to refactor existing resources from `count` to `for_each` without breaking users' infrastructure. So we declare that we'll retire the `terraform-azurerm-vnet` module when `azurerm` provider has its v4.0.0 released. 
+The `terraform-azurerm-vnet` module used `count` because it was the only option, nowadays we encourage using `for_each` instead, but there is no way for us to refactor existing resources from `count` to `for_each` without breaking users' infrastructure. 
 
-For the new infrastructure, you should use this module instead of `terraform-azurerm-vnet`. For existing infrastructure, we'll maintain `terraform-azurerm-vnet` module, fix bugs and amend new features until the `azurerm` provider v4.0.0's release, users should begin the migration from `terraform-azurerm-vnet` to `terraform-azurerm-subnets`.
+For the new infrastructure, you should use this module instead of `terraform-azurerm-vnet`. For existing infrastructure, we'll maintain `terraform-azurerm-vnet` module, fix bugs and amend new features.
 
 The module does not create nor expose a security group. This would need to be defined separately as additional security rules on subnets in the deployed network.
 
