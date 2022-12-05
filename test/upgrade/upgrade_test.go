@@ -1,6 +1,9 @@
 package upgrade
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
 
 	test_helper "github.com/Azure/terraform-module-test-helper"
@@ -8,14 +11,16 @@ import (
 )
 
 func TestExamples(t *testing.T) {
-	examples := []string{
-		"exmaples/all_default",
-		"examples/complete",
-		"examples/new_route",
+	examples, err := os.ReadDir(filepath.Clean("../../examples"))
+	if err != nil {
+		t.Fatalf(err.Error())
 	}
 	for _, example := range examples {
-		t.Run(example, func(t *testing.T) {
-			testExample(t, example)
+		if !example.IsDir() {
+			continue
+		}
+		t.Run(example.Name(), func(t *testing.T) {
+			testExample(t, fmt.Sprintf("examples/%s", example.Name()))
 		})
 	}
 }
@@ -29,7 +34,7 @@ func testExample(t *testing.T, exampleRelativePath string) {
 	if err != nil {
 		t.FailNow()
 	}
-	test_helper.ModuleUpgradeTest(t, "lonegunmanb", "terraform-azurerm-subnets", exampleRelativePath, currentRoot, terraform.Options{
+	test_helper.ModuleUpgradeTest(t, "Azure", "terraform-azurerm-subnets", exampleRelativePath, currentRoot, terraform.Options{
 		Upgrade: true,
 	}, currentMajorVersion)
 }
