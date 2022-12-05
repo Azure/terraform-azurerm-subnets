@@ -1,6 +1,9 @@
 package e2e
 
 import (
+	"fmt"
+	"os"
+	"path/filepath"
 	"regexp"
 	"testing"
 
@@ -10,14 +13,16 @@ import (
 )
 
 func TestExamples(t *testing.T) {
-	examples := []string{
-		"examples/all_default",
-		"examples/complete",
-		"examples/new_route",
+	examples, err := os.ReadDir(filepath.Clean("../../examples"))
+	if err != nil {
+		t.Fatalf(err.Error())
 	}
 	for _, example := range examples {
-		t.Run(example, func(t *testing.T) {
-			testExample(t, example)
+		if !example.IsDir() {
+			continue
+		}
+		t.Run(example.Name(), func(t *testing.T) {
+			testExample(t, fmt.Sprintf("examples/%s", example.Name()))
 		})
 	}
 }

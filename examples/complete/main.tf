@@ -20,13 +20,13 @@ resource "azurerm_route_table" "rt1" {
 }
 
 resource "azurerm_network_ddos_protection_plan" "example" {
-  location            = azurerm_resource_group.example.location
+  location            = var.vnet_location
   name                = "example-protection-plan"
   resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_nat_gateway" "example" {
-  location            = azurerm_resource_group.example.location
+  location            = var.vnet_location
   name                = "example-natgateway"
   resource_group_name = azurerm_resource_group.example.name
 }
