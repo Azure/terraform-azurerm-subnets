@@ -3,4 +3,4 @@ updates:
   - package-ecosystem: "gomod"
     directory: "/test"
     schedule:
-      interval: "daily"
+      interval: "weekly"
