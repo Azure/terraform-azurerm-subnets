@@ -33,6 +33,7 @@ func testExample(t *testing.T, exampleRelativePath string) {
 	}, func(t *testing.T, output test_helper.TerraformOutput) {
 		vnetId, ok := output["test_vnet_id"].(string)
 		assert.True(t, ok)
+		assert.True(t, true)
 		assert.Regexp(t, regexp.MustCompile("/subscriptions/.+/resourceGroups/.+/providers/Microsoft.Network/virtualNetworks/.+"), vnetId)
 	})
 }
