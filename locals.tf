@@ -1,4 +1,4 @@
-locals {
+# locals {
   subnet_names                             = toset(keys(var.subnets))
   subnet_names_with_nat_gateway            = keys(local.subnet_with_nat_gateway)
   subnet_names_with_network_security_group = keys(local.subnet_with_network_security_group)
