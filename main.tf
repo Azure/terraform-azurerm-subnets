@@ -26,19 +26,19 @@ resource "azurerm_virtual_network_dns_servers" "vnet_dns" {
 }
 
 resource "azurerm_subnet" "subnet" {
-  for_each = local.subnet_names
+  for_each = var.subnets
 
-  address_prefixes                              = var.subnets[each.value].address_prefixes
-  name                                          = each.value
+  address_prefixes                              = each.value.address_prefixes
+  name                                          = each.key
   resource_group_name                           = var.resource_group_name
   virtual_network_name                          = azurerm_virtual_network.vnet.name
-  private_endpoint_network_policies_enabled     = var.subnets[each.value].private_endpoint_network_policies_enabled
-  private_link_service_network_policies_enabled = var.subnets[each.value].private_link_service_network_policies_enabled
-  service_endpoint_policy_ids                   = var.subnets[each.value].service_endpoint_policy_ids
-  service_endpoints                             = var.subnets[each.value].service_endpoints
+  private_endpoint_network_policies_enabled     = each.value.private_endpoint_network_policies_enabled
+  private_link_service_network_policies_enabled = each.value.private_link_service_network_policies_enabled
+  service_endpoint_policy_ids                   = each.value.service_endpoint_policy_ids
+  service_endpoints                             = each.value.service_endpoints
 
   dynamic "delegation" {
-    for_each = var.subnets[each.value].delegations == null ? [] : var.subnets[each.value].delegations
+    for_each = each.value.delegations == null ? [] : each.value.delegations
 
     content {
       name = delegation.value.name
@@ -62,22 +62,22 @@ locals {
 }
 
 resource "azurerm_subnet_network_security_group_association" "vnet" {
-  for_each = toset(local.subnet_names_with_network_security_group)
+  for_each = local.subnet_with_network_security_group
 
-  network_security_group_id = var.subnets[each.value].network_security_group.id
-  subnet_id                 = local.azurerm_subnet_name2id[each.value]
+  network_security_group_id = each.value
+  subnet_id                 = local.azurerm_subnet_name2id[each.key]
 }
 
 resource "azurerm_subnet_route_table_association" "vnet" {
-  for_each = toset(local.subnet_names_with_route_table)
+  for_each = local.subnets_with_route_table
 
-  route_table_id = var.subnets[each.value].route_table.id
-  subnet_id      = local.azurerm_subnet_name2id[each.value]
+  route_table_id = each.value
+  subnet_id      = local.azurerm_subnet_name2id[each.key]
 }
 
 resource "azurerm_subnet_nat_gateway_association" "nat_gw" {
-  for_each = toset(local.subnet_names_with_nat_gateway)
+  for_each = local.subnet_with_nat_gateway
 
-  nat_gateway_id = var.subnets[each.value].nat_gateway.id
-  subnet_id      = local.azurerm_subnet_name2id[each.value]
+  nat_gateway_id = each.value
+  subnet_id      = local.azurerm_subnet_name2id[each.key]
 }
