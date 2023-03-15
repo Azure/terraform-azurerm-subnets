@@ -12,7 +12,7 @@ import (
 type subnet struct {
 	name                                          string
 	id                                            string
-	Address_prefixes                              []string    `mapstructure:"address_prefixes"`
+	Address_space                                 []string    `mapstructure:"address_space"`
 	Nat_gateway                                   *natGw      `mapstructure:"nat_gateway, omitempty"`
 	Network_security_group                        *nsg        `mapstructure:"network_security_group,omitempty"`
 	Private_endpoint_network_policies_enabled     bool        `mapstructure:"private_endpoint_network_policies_enabled"`
@@ -48,27 +48,27 @@ type natGw struct {
 
 var (
 	baseSubnet = subnet{
-		name:             "baseSubnet",
-		id:               "baseSubnet_id",
-		Address_prefixes: []string{"10.0.0.0/24"},
+		name:          "baseSubnet",
+		id:            "baseSubnet_id",
+		Address_space: []string{"10.0.0.0/24"},
 	}
 	subnetWithRt = subnet{
-		name:             "subnetWithRt",
-		id:               "subnetWithRt_id",
-		Address_prefixes: []string{"10.0.1.0/24"},
-		Route_table:      &routeTable{Id: "rt_id"},
+		name:          "subnetWithRt",
+		id:            "subnetWithRt_id",
+		Address_space: []string{"10.0.1.0/24"},
+		Route_table:   &routeTable{Id: "rt_id"},
 	}
 	subnetWithNsg = subnet{
 		name:                   "subnetWithNsg",
 		id:                     "subnetWithNsg_id",
-		Address_prefixes:       []string{"10.0.2.0/24"},
+		Address_space:          []string{"10.0.2.0/24"},
 		Network_security_group: &nsg{Id: "nsg_id"},
 	}
 	subnetWithNatGw = subnet{
-		name:             "subnetWithNatGw",
-		id:               "subnetWithNatGw_id",
-		Address_prefixes: []string{"10.0.3.0/24"},
-		Nat_gateway:      &natGw{Id: "nat_gw_id"},
+		name:          "subnetWithNatGw",
+		id:            "subnetWithNatGw_id",
+		Address_space: []string{"10.0.3.0/24"},
+		Nat_gateway:   &natGw{Id: "nat_gw_id"},
 	}
 )
 

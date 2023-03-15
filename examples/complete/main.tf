@@ -36,7 +36,7 @@ module "vnet" {
   resource_group_name = azurerm_resource_group.example.name
   subnets = {
     subnet0 = {
-      address_prefixes                          = ["10.0.0.0/24"]
+      address_space                          = ["10.0.0.0/24"]
       private_endpoint_network_policies_enabled = false
       service_endpoints = [
         "Microsoft.Storage", "Microsoft.Sql"
@@ -56,7 +56,7 @@ module "vnet" {
       ]
     }
     subnet1 = {
-      address_prefixes                          = ["10.0.1.0/24"]
+      address_space                          = ["10.0.1.0/24"]
       private_endpoint_network_policies_enabled = false
       service_endpoints                         = ["Microsoft.AzureActiveDirectory"]
     }

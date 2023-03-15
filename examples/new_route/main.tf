@@ -11,7 +11,7 @@ locals {
   subnets = {
     for i in range(3) :
     "subnet${i}" => {
-      address_prefixes = [cidrsubnet(local.virtual_network_address_space, 8, i)]
+      address_space = [cidrsubnet(local.virtual_network_address_space, 8, i)]
       route_table = {
         id = azurerm_route_table.example.id
       }
