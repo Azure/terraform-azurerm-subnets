@@ -7,7 +7,7 @@ variable "resource_group_name" {
 variable "subnets" {
   type = map(object(
     {
-      address_prefixes = list(string) # (Required) The address prefixes to use for the subnet.
+      address_space = list(string) # (Required) The address spaces to use for the subnet.
       nat_gateway = optional(object({
         id = string # (Required) The ID of the NAT Gateway which should be associated with the Subnet. Changing this forces a new resource to be created.
       }))
