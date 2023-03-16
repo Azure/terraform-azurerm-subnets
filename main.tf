@@ -28,7 +28,7 @@ resource "azurerm_virtual_network_dns_servers" "vnet_dns" {
 resource "azurerm_subnet" "subnet" {
   for_each = var.subnets
 
-  address_prefixes                              = each.value.address_prefixes
+  address_prefixes                              = each.value.address_prefixes != null ? each.value.address_prefixes : each.value.address_space
   name                                          = each.key
   resource_group_name                           = var.resource_group_name
   virtual_network_name                          = azurerm_virtual_network.vnet.name

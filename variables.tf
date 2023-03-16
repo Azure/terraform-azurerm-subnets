@@ -7,7 +7,8 @@ variable "resource_group_name" {
 variable "subnets" {
   type = map(object(
     {
-      address_space = list(string) # (Required) The address spaces to use for the subnet.
+      address_prefixes = optional(list(string)) # (Deprecated) This field is deprecated and will be removed in 2.0.0, please use address_space instead. The address spaces to use for the subnet.
+      address_space    = optional(list(string)) # (Required) The address spaces to use for the subnet.
       nat_gateway = optional(object({
         id = string # (Required) The ID of the NAT Gateway which should be associated with the Subnet. Changing this forces a new resource to be created.
       }))
@@ -35,6 +36,14 @@ variable "subnets" {
     }
   ))
   description = "Subnets to create"
+  validation {
+    condition     = alltrue([for name, subnet in var.subnets : subnet.address_prefixes != null || subnet.address_space != null])
+    error_message = "Either one of `address_prefixes` or `address_space` must be set."
+  }
+  validation {
+    condition     = alltrue([for name, subnet in var.subnets : subnet.address_prefixes == null || subnet.address_space == null])
+    error_message = "Cannot set both `address_prefixes` and `address_space`."
+  }
 }
 
 variable "virtual_network_address_space" {
