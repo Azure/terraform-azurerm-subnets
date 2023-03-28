@@ -4,6 +4,7 @@
 
 **Merged pull requests:**
 
+- Bump github.com/Azure/terraform-module-test-helper from 0.8.1 to 0.12.0 in /test [\#21](https://github.com/Azure/terraform-azurerm-subnets/pull/21) ([dependabot[bot]](https://github.com/apps/dependabot))
 - address\_space consistency with azurerm [\#19](https://github.com/Azure/terraform-azurerm-subnets/pull/19) ([matt-FFFFFF](https://github.com/matt-FFFFFF))
 - Simplify the expressions [\#18](https://github.com/Azure/terraform-azurerm-subnets/pull/18) ([lonegunmanb](https://github.com/lonegunmanb))
 - Bump github.com/gruntwork-io/terratest from 0.41.10 to 0.41.11 in /test [\#13](https://github.com/Azure/terraform-azurerm-subnets/pull/13) ([dependabot[bot]](https://github.com/apps/dependabot))
