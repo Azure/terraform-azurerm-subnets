@@ -6,7 +6,14 @@ resource "azurerm_virtual_network" "vnet" {
   bgp_community           = var.virtual_network_bgp_community
   edge_zone               = var.virtual_network_edge_zone
   flow_timeout_in_minutes = var.virtual_network_flow_timeout_in_minutes
-  tags                    = var.virtual_network_tags
+  tags = merge(var.virtual_network_tags, (/*<box>*/ (var.tracing_tags_enabled ? { for k, v in /*</box>*/ {
+    avm_git_commit           = "7dd2356c0d54c2e3d9c7ee48a0caa214e445ad11"
+    avm_git_file             = "main.tf"
+    avm_git_last_modified_at = "2022-10-18 13:49:51"
+    avm_git_org              = "Azure"
+    avm_git_repo             = "terraform-azurerm-subnets"
+    avm_yor_trace            = "6c97d4d3-3ac7-4794-9eb2-864e7acb589c"
+  } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/))
 
   dynamic "ddos_protection_plan" {
     for_each = var.virtual_network_ddos_protection_plan != null ? [var.virtual_network_ddos_protection_plan] : []
