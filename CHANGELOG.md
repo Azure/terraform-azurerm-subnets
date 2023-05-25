@@ -5,6 +5,7 @@
 **Merged pull requests:**
 
 - Add tracing tag toggle variables [\#27](https://github.com/Azure/terraform-azurerm-subnets/pull/27) ([lonegunmanb](https://github.com/lonegunmanb))
+- Bump github.com/Azure/terraform-module-test-helper from 0.12.0 to 0.13.0 in /test [\#25](https://github.com/Azure/terraform-azurerm-subnets/pull/25) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Bump github.com/Azure/terraform-module-test-helper from 0.8.1 to 0.12.0 in /test [\#21](https://github.com/Azure/terraform-azurerm-subnets/pull/21) ([dependabot[bot]](https://github.com/apps/dependabot))
 - address\_space consistency with azurerm [\#19](https://github.com/Azure/terraform-azurerm-subnets/pull/19) ([matt-FFFFFF](https://github.com/matt-FFFFFF))
 - Simplify the expressions [\#18](https://github.com/Azure/terraform-azurerm-subnets/pull/18) ([lonegunmanb](https://github.com/lonegunmanb))
