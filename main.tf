@@ -12,10 +12,10 @@ resource "azurerm_virtual_network" "vnet" {
     avm_git_last_modified_at = "2022-10-18 13:49:51"
     avm_git_org              = "Azure"
     avm_git_repo             = "terraform-azurerm-subnets"
-    avm_yor_trace            = "e65c5717-9449-45b6-8bb6-a33d922acdcd"
-    } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/), {
+    avm_yor_trace            = "a96b0188-9d1a-43da-b8d2-8026f42d6e8b"
+    } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/), (/*<box>*/ (var.tracing_tags_enabled ? { for k, v in /*</box>*/ {
     avm_yor_name = "vnet"
-  })
+  } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/))
 
   dynamic "ddos_protection_plan" {
     for_each = var.virtual_network_ddos_protection_plan != null ? [var.virtual_network_ddos_protection_plan] : []
