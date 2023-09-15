@@ -4,6 +4,7 @@
 
 **Merged pull requests:**
 
+- support create new ddos protection plan resource in this module [\#46](https://github.com/Azure/terraform-azurerm-subnets/pull/46) ([lonegunmanb](https://github.com/lonegunmanb))
 - Bump github.com/Azure/terraform-module-test-helper from 0.13.0 to 0.16.0 in /test [\#42](https://github.com/Azure/terraform-azurerm-subnets/pull/42) ([dependabot[bot]](https://github.com/apps/dependabot))
 - Add tracing tag toggle variables [\#27](https://github.com/Azure/terraform-azurerm-subnets/pull/27) ([lonegunmanb](https://github.com/lonegunmanb))
 - Bump github.com/Azure/terraform-module-test-helper from 0.12.0 to 0.13.0 in /test [\#25](https://github.com/Azure/terraform-azurerm-subnets/pull/25) ([dependabot[bot]](https://github.com/apps/dependabot))

@@ -4,7 +4,15 @@ resource "azurerm_network_ddos_protection_plan" "this" {
   location            = var.virtual_network_location
   name                = var.new_network_ddos_protection_plan.name
   resource_group_name = var.resource_group_name
-  tags                = var.new_network_ddos_protection_plan.tags
+  tags = merge(var.new_network_ddos_protection_plan.tags, (/*<box>*/ (var.tracing_tags_enabled ? { for k, v in /*</box>*/ {
+    avm_git_commit           = "9ffea8cd437d81c14a11f555ba9f4d97db53569a"
+    avm_git_file             = "main.tf"
+    avm_git_last_modified_at = "2023-09-15 01:08:28"
+    avm_git_org              = "Azure"
+    avm_git_repo             = "terraform-azurerm-subnets"
+    avm_yor_name             = "this"
+    avm_yor_trace            = "ccd4a154-b9b4-4cf0-a099-ccaf0a89b6f1"
+  } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/))
 
   dynamic "timeouts" {
     for_each = var.new_network_ddos_protection_plan.timeouts == null ? [] : [var.new_network_ddos_protection_plan.timeouts]
@@ -31,7 +39,7 @@ resource "azurerm_virtual_network" "vnet" {
     avm_git_last_modified_at = "2022-10-18 13:49:51"
     avm_git_org              = "Azure"
     avm_git_repo             = "terraform-azurerm-subnets"
-    avm_yor_trace            = "1278db92-2c4b-44a4-a527-0e0e29f60327"
+    avm_yor_trace            = "a82db563-d147-4d76-9803-771d5e3cc230"
     } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/), (/*<box>*/ (var.tracing_tags_enabled ? { for k, v in /*</box>*/ {
     avm_yor_name = "vnet"
   } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {}) /*</box>*/))
