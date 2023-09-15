@@ -60,6 +60,31 @@ variable "virtual_network_name" {
   nullable    = false
 }
 
+variable "new_network_ddos_protection_plan" {
+  type = object({
+    name = string
+    tags = optional(map(string))
+    timeouts = optional(object({
+      create = optional(string)
+      delete = optional(string)
+      read   = optional(string)
+      update = optional(string)
+    }))
+  })
+  default     = null
+  description = <<-EOT
+ - `name` - (Required) Specifies the name of the Network DDoS Protection Plan. Changing this forces a new resource to be created.
+ - `tags` - (Optional) A mapping of tags to assign to the resource.
+
+ ---
+ `timeouts` block supports the following:
+ - `create` - (Defaults to 30 minutes) Used when creating the DDoS Protection Plan.
+ - `delete` - (Defaults to 30 minutes) Used when deleting the DDoS Protection Plan.
+ - `read` - (Defaults to 5 minutes) Used when retrieving the DDoS Protection Plan.
+ - `update` - (Defaults to 30 minutes) Used when updating the DDoS Protection Plan.
+EOT
+}
+
 # tflint-ignore: terraform_unused_declarations
 variable "tracing_tags_enabled" {
   type        = bool

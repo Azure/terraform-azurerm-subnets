@@ -1,3 +1,22 @@
+resource "azurerm_network_ddos_protection_plan" "this" {
+  count = var.new_network_ddos_protection_plan == null ? 0 : 1
+
+  location            = var.virtual_network_location
+  name                = var.new_network_ddos_protection_plan.name
+  resource_group_name = var.resource_group_name
+  tags                = var.new_network_ddos_protection_plan.tags
+
+  dynamic "timeouts" {
+    for_each = var.new_network_ddos_protection_plan.timeouts == null ? [] : [var.new_network_ddos_protection_plan.timeouts]
+    content {
+      create = timeouts.value.create
+      delete = timeouts.value.delete
+      read   = timeouts.value.read
+      update = timeouts.value.update
+    }
+  }
+}
+
 resource "azurerm_virtual_network" "vnet" {
   address_space           = var.virtual_network_address_space
   location                = var.virtual_network_location
@@ -23,6 +42,20 @@ resource "azurerm_virtual_network" "vnet" {
     content {
       enable = ddos_protection_plan.value.enable
       id     = ddos_protection_plan.value.id
+    }
+  }
+  dynamic "ddos_protection_plan" {
+    for_each = azurerm_network_ddos_protection_plan.this
+    content {
+      enable = true
+      id     = ddos_protection_plan.value.id
+    }
+  }
+
+  lifecycle {
+    precondition {
+      condition     = var.virtual_network_ddos_protection_plan == null || var.new_network_ddos_protection_plan == null
+      error_message = "Cannot set both of `var.virtual_network_ddos_protection_plan` and `var.new_network_ddos_protection_plan`"
     }
   }
 }
