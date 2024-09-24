@@ -16,6 +16,7 @@ resource "azurerm_network_ddos_protection_plan" "this" {
 
   dynamic "timeouts" {
     for_each = var.new_network_ddos_protection_plan.timeouts == null ? [] : [var.new_network_ddos_protection_plan.timeouts]
+
     content {
       create = timeouts.value.create
       delete = timeouts.value.delete
@@ -54,6 +55,7 @@ resource "azurerm_virtual_network" "vnet" {
   }
   dynamic "ddos_protection_plan" {
     for_each = azurerm_network_ddos_protection_plan.this
+
     content {
       enable = true
       id     = ddos_protection_plan.value.id
