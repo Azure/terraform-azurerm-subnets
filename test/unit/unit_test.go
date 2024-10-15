@@ -20,6 +20,7 @@ type subnet struct {
 	Route_table                                   *routeTable `mapstructure:"route_table,omitempty"`
 	Service_endpoints                             []string    `mapstructure:"service_endpoints,omitempty"`
 	Service_endpoint_policy_ids                   []string    `mapstructure:"service_endpoint_policy_ids,omitempty"`
+	Default_outbound_access_enabled 			  bool        `mapstructure:"default_outbound_access_enabled,omitempty"`
 	Delegations                                   []struct {
 		Name               string `mapstructure:"name"`
 		Service_delegation struct {
