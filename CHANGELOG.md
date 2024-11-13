@@ -4,6 +4,7 @@
 
 **Merged pull requests:**
 
+- Add outbound access argument to subnets [\#66](https://github.com/Azure/terraform-azurerm-subnets/pull/66) ([lonegunmanb](https://github.com/lonegunmanb))
 - Bump github.com/Azure/terraform-module-test-helper from 0.16.0 to 0.26.0 in /test [\#62](https://github.com/Azure/terraform-azurerm-subnets/pull/62) ([lonegunmanb](https://github.com/lonegunmanb))
 - Use oidc as e2e test authentication method [\#60](https://github.com/Azure/terraform-azurerm-subnets/pull/60) ([lonegunmanb](https://github.com/lonegunmanb))
 - support create new ddos protection plan resource in this module [\#46](https://github.com/Azure/terraform-azurerm-subnets/pull/46) ([lonegunmanb](https://github.com/lonegunmanb))
