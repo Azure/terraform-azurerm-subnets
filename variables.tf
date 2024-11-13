@@ -19,9 +19,9 @@ variable "subnets" {
       route_table = optional(object({
         id = string # (Required) The ID of the Route Table which should be associated with the Subnet. Changing this forces a new association to be created.
       }))
-      service_endpoints           = optional(set(string)) # (Optional) The list of Service endpoints to associate with the subnet. Possible values include: `Microsoft.AzureActiveDirectory`, `Microsoft.AzureCosmosDB`, `Microsoft.ContainerRegistry`, `Microsoft.EventHub`, `Microsoft.KeyVault`, `Microsoft.ServiceBus`, `Microsoft.Sql`, `Microsoft.Storage` and `Microsoft.Web`.
-      service_endpoint_policy_ids = optional(set(string)) # (Optional) The list of IDs of Service Endpoint Policies to associate with the subnet.
-      default_outbound_access_enabled = optional(bool, true) # (Optional) Enable default outbound access to the internet for the subnet. Defaults to `true`.
+      service_endpoints               = optional(set(string)) # (Optional) The list of Service endpoints to associate with the subnet. Possible values include: `Microsoft.AzureActiveDirectory`, `Microsoft.AzureCosmosDB`, `Microsoft.ContainerRegistry`, `Microsoft.EventHub`, `Microsoft.KeyVault`, `Microsoft.ServiceBus`, `Microsoft.Sql`, `Microsoft.Storage` and `Microsoft.Web`.
+      service_endpoint_policy_ids     = optional(set(string)) # (Optional) The list of IDs of Service Endpoint Policies to associate with the subnet.
+      default_outbound_access_enabled = optional(bool, true)  # (Optional) Enable default outbound access to the internet for the subnet. Defaults to `true`.
       delegations = optional(list(
         object(
           {
